@@ -103,12 +103,34 @@
 					request.onreadystatechange = function() {
 						if(request.readyState == 4) {
 							if(request.status == 200) {
+								var currency = document.getElementById("currency").value;
+								var direction = document.getElementById("direction").value;
+								if(currency == "BTC" || currency == "sats") {
+									var currency_type = "sats";
+								} else {
+									var currency_type = "gov_shitcoin"
+								}
+
+								if(currency_type == "sats" && direction == "Buy") {
+									var client_to_vekslak_unit = document.getElementById("target-currency-gov-shitcoin").value;
+									var vekslak_to_client_unit = currency;
+								} else if(currency_type == "gov_shitcoin" && direction == "Sell") {
+									var client_to_vekslak_unit = currency;
+									var vekslak_to_client_unit = "BTC";
+								} else if(currency_type == "sats" && direction == "Sell") {
+									var vekslak_to_client_unit = document.getElementById("target-currency-gov-shitcoin").value;
+									var client_to_vekslak_unit = currency;
+								} else {
+									var vekslak_to_client_unit = currency;
+									var client_to_vekslak_unit = "BTC";
+								}
+
 								var response = JSON.parse(request.responseText);
-								document.getElementById("hedged-amount").innerHTML = response.hedged_amount;
-								document.getElementById("hedged-price").innerHTML = response.hedge_price;
+								document.getElementById("hedged-amount").innerHTML = response.hedged_amount + " USD";
+								document.getElementById("hedged-price").innerHTML = response.hedge_price + " USD/BTC";
 								//document.getElementById("liquidation-price").innerHTML = response.liquidation_price;
-								document.getElementById("vekslak-to-client-amount").innerHTML = response.vekslak_to_client;
-								document.getElementById("client-to-vekslak-amount").innerHTML = response.client_to_vekslak;
+								document.getElementById("vekslak-to-client-amount").innerHTML = +response.vekslak_to_client.toFixed(8) + " " + vekslak_to_client_unit;
+								document.getElementById("client-to-vekslak-amount").innerHTML = +response.client_to_vekslak.toFixed(8) + " " + client_to_vekslak_unit;
 								document.getElementById("hedging-wait").classList.add("hide");
 								document.getElementById("hedged").classList.remove("hide");
 							} else {
