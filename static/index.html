@@ -12,10 +12,10 @@
 			<h1>Vekslosh</h1>
 			<em>Earn sats on the streets</em>
 			<div style="margin-top: 30px;">
-				<span>Klient chce</span>
+				<span>The client wants to </span>
 				<select id="direction">
-					<option value="Buy">kupit</option>
-					<option value="Sell">predat</option>
+					<option value="Buy">buy</option>
+					<option value="Sell">sell</option>
 				</select>
 				<input type="text" id="amount">
 				<select id="currency">
@@ -25,7 +25,7 @@
 					<option value="USD">USD</option>
 					<option value="CZK">CZK</option>
 				</select>
-				za
+				for
 				<select id="target-currency-gov-shitcoin">
 					<option value="EUR">EUR</option>
 					<option value="USD">USD</option>
@@ -34,14 +34,14 @@
 				<span id="target-currency-btc" class="hide">BTC</span>
 			</div>
 			<div style="margin-top: 10px;">
-			Poplatok: <input type="text" id="fee"> %
+			Fee: <input type="text" id="fee"> %
 			</div>
 			<div style="margin-top: 10px;">
-			<button id="do-preview-hedge">Skontrolovat hedge</button>
+			<button id="do-preview-hedge">Review hedge</button>
 			</div>
 			<div style="margin-top: 20px;">
 				<div>
-					Vekslak si nechava <span id="sat-fee-ratio-info"></span>% zarobku v BTC.
+					Vekslak keeps <span id="sat-fee-ratio-info"></span>% of fee in BTC.
 				</div>
 				<div>
 					<input type="range" min="0" max="100" value="100" id="sat-fee-ratio">
@@ -49,24 +49,25 @@
 			</div>
 		</div>
 		<div id="preview-hedge" class="hide">
-			Naozaj chces hedge-nut <span id="hedge-amount"></span>?
-			<button id="do-hedge">Hedgni!</button>
+			Do you really want to hedge <span id="hedge-amount"></span>?
+			<button id="do-hedge">Hedge!</button>
 		</div>
 		<div id="hedging-wait" class="hide">
-			<h1>Hedguje sa...</h1>
+			<h1>Hedging...</h1>
+			Please wait.
 		</div>
 		<div id="hedged" class="hide">
-			<h1>Hedgnute!</h1>
+			<h1>Hedged!</h1>
 			<table>
-				<tr><td>Suma: </td><td id="hedged-amount"></td></tr>
-				<tr><td>Cena: </td><td id="hedged-price"></td></tr>
+				<tr><td>Hedged amount: </td><td id="hedged-amount"></td></tr>
+				<tr><td>Price: </td><td id="hedged-price"></td></tr>
 				<!--<tr><td>Likvidacna cena: </td><td id="liquidation-price"></td></tr>-->
-				<tr><td>Klient ma poslat: </td><td id="client-to-vekslak-amount"></td></tr>
-				<tr><td>Treba poslat klientovi: </td><td id="vekslak-to-client-amount"></td></tr>
+				<tr><td>The client should send: </td><td id="client-to-vekslak-amount"></td></tr>
+				<tr><td>The client should receive: </td><td id="vekslak-to-client-amount"></td></tr>
 			</table>
 		</div>
 		<div id="error" class="hide">
-			<h1>Nieco sa posralo :(</h1>
+			<h1>Shit hit the fan :(</h1>
 		</div>
 		<script type="text/javascript">
 			window.onload = function() {
