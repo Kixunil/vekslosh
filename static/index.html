@@ -1,0 +1,136 @@
+<html>
+	<head>
+		<title>Vekslosh</title>
+		<style type="text/css">
+.hide {
+	display: none;
+}
+		</style>
+	</head>
+	<body>
+		<div id="home">
+			<span>Klient chce</span>
+			<select id="direction">
+				<option value="Buy">kupit</option>
+				<option value="Sell">predat</option>
+			</select>
+			<input type="text" id="amount">
+			<select id="currency">
+				<option value="BTC">BTC</option>
+				<option value="sats">Sats</option>
+				<option value="EUR">EUR</option>
+				<option value="USD">USD</option>
+				<option value="CZK">CZK</option>
+			</select>
+			za
+			<select id="target-currency-gov-shitcoin">
+				<option value="EUR">EUR</option>
+				<option value="USD">USD</option>
+				<option value="CZK">CZK</option>
+			</select>
+			<span id="target-currency-btc" class="hide">BTC</span>
+			Fee: <input type="text" id="fee"> %
+			<button id="do-preview-hedge">Skontrolovat hedge</button>
+			<div>
+				<div>
+					Vekslak si nechava <span id="sat-fee-ratio-info"></span>% zarobku v BTC.
+				</div>
+				<div>
+					<input type="range" min="0" max="100" value="100" id="sat-fee-ratio">
+				</div>
+			</div>
+		</div>
+		<div id="preview-hedge" class="hide">
+			Naozaj chces hedge-nut <span id="hedge-amount"></span>?
+			<button id="do-hedge">Hedgni!</button>
+		</div>
+		<div id="hedging-wait" class="hide">
+			Hedguje sa...
+		</div>
+		<div id="hedged" class="hide">
+			Hedgnute!
+			<table>
+				<tr><td>Suma: </td><td id="hedged-amount"></td></tr>
+				<tr><td>Cena: </td><td id="hedged-price"></td></tr>
+				<!--<tr><td>Likvidacna cena: </td><td id="liquidation-price"></td></tr>-->
+				<tr><td>Klient ma poslat: </td><td id="client-to-vekslak-amount"></td></tr>
+				<tr><td>Treba poslat klientovi: </td><td id="vekslak-to-client-amount"></td></tr>
+			</table>
+		</div>
+		<div id="error" class="hide">
+			Nieco sa posralo :(
+		</div>
+		<script type="text/javascript">
+			window.onload = function() {
+				document.getElementById("do-preview-hedge").onclick = function() {
+					document.getElementById("home").classList.add("hide");
+					document.getElementById("preview-hedge").classList.remove("hide");
+					document.getElementById("hedge-amount").innerHTML = document.getElementById("amount").value + " " + document.getElementById("currency").value;
+				}
+				document.getElementById("do-hedge").onclick = function() {
+					var amount = parseFloat(document.getElementById("amount").value);
+					var currency = document.getElementById("currency").value;
+					var fee = parseFloat(document.getElementById("fee").value);
+					var direction = document.getElementById("direction").value;
+					var sat_fee_percentage = parseFloat(document.getElementById("sat-fee-ratio").value);
+					if(currency == "BTC") {
+						currency = "sats";
+						amount *= 100000000;
+					}
+					if(currency == "sats") {
+						var target_currency = document.getElementById("target-currency-gov-shitcoin").value;
+					} else {
+						var target_currency = "sats";
+					}
+					var request_data = {
+						amount: amount,
+						currency: currency,
+						fee: fee / 100.0,
+						sat_fee_percentage: sat_fee_percentage,
+						direction: direction,
+						target_currency: target_currency
+					};
+					var request = new XMLHttpRequest();
+					request.onreadystatechange = function() {
+						if(request.readyState == 4) {
+							if(request.status == 200) {
+								var response = JSON.parse(request.responseText);
+								document.getElementById("hedged-amount").innerHTML = response.hedged_amount;
+								document.getElementById("hedged-price").innerHTML = response.hedge_price;
+								//document.getElementById("liquidation-price").innerHTML = response.liquidation_price;
+								document.getElementById("vekslak-to-client-amount").innerHTML = response.vekslak_to_client;
+								document.getElementById("client-to-vekslak-amount").innerHTML = response.client_to_vekslak;
+								document.getElementById("hedging-wait").classList.add("hide");
+								document.getElementById("hedged").classList.remove("hide");
+							} else {
+								document.getElementById("hedging-wait").classList.add("hide");
+								document.getElementById("error").classList.remove("hide");
+							}
+						}
+					};
+					document.getElementById("preview-hedge").classList.add("hide");
+					document.getElementById("hedging-wait").classList.remove("hide");
+					request.open("POST", "/hedge", true);
+					request.send(JSON.stringify(request_data));
+				};
+				document.getElementById("currency").onchange = function () {
+					var currency = document.getElementById("currency").value;
+					if(currency == "BTC" || currency == "sats") {
+						document.getElementById("target-currency-btc").classList.add("hide");
+						document.getElementById("target-currency-gov-shitcoin").classList.remove("hide");
+					} else {
+						document.getElementById("target-currency-gov-shitcoin").classList.add("hide");
+						document.getElementById("target-currency-btc").classList.remove("hide");
+					}
+				};
+				document.getElementById("sat-fee-ratio").oninput = function () {
+					percentage = document.getElementById("sat-fee-ratio").value;
+					document.getElementById("sat-fee-ratio-info").innerHTML = percentage;
+				};
+				document.getElementById("currency").onchange();
+				document.getElementById("sat-fee-ratio").oninput();
+
+			};
+		</script>
+	</body>
+</html>
