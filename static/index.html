@@ -9,29 +9,37 @@
 	</head>
 	<body>
 		<div id="home">
-			<span>Klient chce</span>
-			<select id="direction">
-				<option value="Buy">kupit</option>
-				<option value="Sell">predat</option>
-			</select>
-			<input type="text" id="amount">
-			<select id="currency">
-				<option value="BTC">BTC</option>
-				<option value="sats">Sats</option>
-				<option value="EUR">EUR</option>
-				<option value="USD">USD</option>
-				<option value="CZK">CZK</option>
-			</select>
-			za
-			<select id="target-currency-gov-shitcoin">
-				<option value="EUR">EUR</option>
-				<option value="USD">USD</option>
-				<option value="CZK">CZK</option>
-			</select>
-			<span id="target-currency-btc" class="hide">BTC</span>
-			Fee: <input type="text" id="fee"> %
+			<h1>Vekslosh</h1>
+			<em>Earn sats on the streets</em>
+			<div style="margin-top: 30px;">
+				<span>Klient chce</span>
+				<select id="direction">
+					<option value="Buy">kupit</option>
+					<option value="Sell">predat</option>
+				</select>
+				<input type="text" id="amount">
+				<select id="currency">
+					<option value="BTC">BTC</option>
+					<option value="sats">Sats</option>
+					<option value="EUR">EUR</option>
+					<option value="USD">USD</option>
+					<option value="CZK">CZK</option>
+				</select>
+				za
+				<select id="target-currency-gov-shitcoin">
+					<option value="EUR">EUR</option>
+					<option value="USD">USD</option>
+					<option value="CZK">CZK</option>
+				</select>
+				<span id="target-currency-btc" class="hide">BTC</span>
+			</div>
+			<div style="margin-top: 10px;">
+			Poplatok: <input type="text" id="fee"> %
+			</div>
+			<div style="margin-top: 10px;">
 			<button id="do-preview-hedge">Skontrolovat hedge</button>
-			<div>
+			</div>
+			<div style="margin-top: 20px;">
 				<div>
 					Vekslak si nechava <span id="sat-fee-ratio-info"></span>% zarobku v BTC.
 				</div>
@@ -45,10 +53,10 @@
 			<button id="do-hedge">Hedgni!</button>
 		</div>
 		<div id="hedging-wait" class="hide">
-			Hedguje sa...
+			<h1>Hedguje sa...</h1>
 		</div>
 		<div id="hedged" class="hide">
-			Hedgnute!
+			<h1>Hedgnute!</h1>
 			<table>
 				<tr><td>Suma: </td><td id="hedged-amount"></td></tr>
 				<tr><td>Cena: </td><td id="hedged-price"></td></tr>
@@ -58,7 +66,7 @@
 			</table>
 		</div>
 		<div id="error" class="hide">
-			Nieco sa posralo :(
+			<h1>Nieco sa posralo :(</h1>
 		</div>
 		<script type="text/javascript">
 			window.onload = function() {
